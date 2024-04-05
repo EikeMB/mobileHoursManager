@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "840457112099",
+    "project_id": "hourtracker-13ecb",
+    "storage_bucket": "hourtracker-13ecb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:840457112099:android:976930656bdb9786107f96",
+        "android_client_info": {
+          "package_name": "com.example.hour_log"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "840457112099-aqjs6fg2guuh7lee72kg9jqommd2sg8a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCQWvFatfIA-sQru_jZpl1wcrJhxhGebnA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "840457112099-aqjs6fg2guuh7lee72kg9jqommd2sg8a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
