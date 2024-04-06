@@ -1,10 +1,8 @@
-
-
-
 import 'package:flutter/material.dart';
 
 class Register extends StatefulWidget {
-  const Register({super.key});
+  final Function toggleView;
+  const Register(this.toggleView, {super.key});
 
   @override
   State<Register> createState() => _RegisterState();
@@ -30,6 +28,7 @@ class _RegisterState extends State<Register> {
               iconColor: MaterialStateProperty.all(Colors.black)
             ),
             onPressed: () {
+              widget.toggleView();
             },
             icon: const Icon(Icons.person),
             label: const Text(

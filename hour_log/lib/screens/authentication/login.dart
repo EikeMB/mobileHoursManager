@@ -3,7 +3,9 @@
 import 'package:flutter/material.dart';
 
 class SignIn extends StatefulWidget{
-  const SignIn({super.key});
+  final Function toggleView;
+  
+  const SignIn(this.toggleView, {super.key});
 
   @override
   State<SignIn> createState() => _SignInState();
@@ -29,6 +31,7 @@ class _SignInState extends State<SignIn> {
               iconColor: MaterialStateProperty.all(Colors.black)
             ),
             onPressed: () {
+              widget.toggleView();
             },
             icon: const Icon(Icons.person),
             label: const Text(
@@ -74,7 +77,7 @@ class _SignInState extends State<SignIn> {
                 onPressed: () {
                   setState(() {
                     if(_formKey.currentState!.validate()){
-                      
+
                     }
 
                     error = 'Sign in unsuccessful';
