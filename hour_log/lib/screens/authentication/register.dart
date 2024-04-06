@@ -1,25 +1,26 @@
 
 
+
 import 'package:flutter/material.dart';
 
-class SignIn extends StatefulWidget{
-  const SignIn({super.key});
+class Register extends StatefulWidget {
+  const Register({super.key});
 
   @override
-  State<SignIn> createState() => _SignInState();
+  State<Register> createState() => _RegisterState();
 }
 
-class _SignInState extends State<SignIn> {
+class _RegisterState extends State<Register> {
 
   final _formKey = GlobalKey<FormState>();
 
   String email = '';
   String password = '';
+  String confirmPassword = '';
   String error = '';
 
-
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -32,7 +33,7 @@ class _SignInState extends State<SignIn> {
             },
             icon: const Icon(Icons.person),
             label: const Text(
-              'Register',
+              'Sign In',
               style: TextStyle(
                 color: Colors.black
               )
@@ -41,7 +42,7 @@ class _SignInState extends State<SignIn> {
         ],
         backgroundColor: Colors.purple[200],
         elevation: 0.0,
-        title: const Text('Sign in'),
+        title: const Text('Register'),
       ),
       body: Container(
         padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
@@ -69,14 +70,22 @@ class _SignInState extends State<SignIn> {
                 obscureText: true,
               ),
               const SizedBox(height: 20.0,),
+              TextFormField(
+                validator: (value) => value != password ? 'Passwords must match' : null,
+                onChanged: (value) {
+                  confirmPassword = value;
+                },
+                obscureText: true,
+              ),
+              const SizedBox(height: 20.0,),
               ElevatedButton(
                 style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.purple[300])),
                 onPressed: () {
-                  setState(() {
-                    if(_formKey.currentState!.validate()){
-                      
-                    }
 
+                  if(_formKey.currentState!.validate()){
+
+                  }
+                  setState(() {
                     error = 'Sign in unsuccessful';
                   });
                 },
