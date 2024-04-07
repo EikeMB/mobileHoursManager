@@ -2,12 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:hour_log/models/user.dart';
 import 'package:hour_log/screens/authentication/authenticate.dart';
-import 'package:hour_log/screens/authentication/register.dart';
 import 'package:hour_log/screens/wrapper.dart';
 import 'package:hour_log/services/auth.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
-import 'package:hour_log/screens/authentication/login.dart';
 
 
 
@@ -16,9 +14,7 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MaterialApp(
-    home: Authenticate(),
-  ));
+  runApp(const MyApp());
 }
 
 

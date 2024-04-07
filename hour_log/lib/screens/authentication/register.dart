@@ -114,7 +114,7 @@ class _RegisterState extends State<Register> {
                   }
                 },
                 child: const Text(
-                  'Sign In',
+                  'Register',
                   style: TextStyle(color: Colors.white),
                 ),
               ),

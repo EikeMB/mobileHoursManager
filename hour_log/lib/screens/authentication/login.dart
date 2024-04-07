@@ -82,8 +82,7 @@ class _SignInState extends State<SignIn> {
               const SizedBox(height: 20.0,),
               ElevatedButton(
                 style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.purple[300])),
-                onPressed: () {
-                  setState(() async {
+                onPressed: () async {
                     if(_formKey.currentState!.validate()){
                       setState(() {
                         loading = true;
@@ -98,8 +97,8 @@ class _SignInState extends State<SignIn> {
                         loading = false;
                         error = 'Login unsuccessful';
                       });
-                    }
-                  });
+                    
+                  }
                 },
                 child: const Text(
                   'Sign In',
