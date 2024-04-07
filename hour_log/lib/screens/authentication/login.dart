@@ -1,6 +1,9 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:hour_log/services/auth.dart';
+import 'package:hour_log/shared/constants.dart';
+import 'package:hour_log/shared/loading.dart';
 
 class SignIn extends StatefulWidget{
   final Function toggleView;
@@ -12,8 +15,10 @@ class SignIn extends StatefulWidget{
 }
 
 class _SignInState extends State<SignIn> {
-
+  final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
+
+  bool loading = false;
 
   String email = '';
   String password = '';
@@ -22,7 +27,7 @@ class _SignInState extends State<SignIn> {
 
   @override
   Widget build(BuildContext context){
-    return Scaffold(
+    return loading ? const Loading() : Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         actions: [
@@ -51,9 +56,11 @@ class _SignInState extends State<SignIn> {
         child: Form(
           key: _formKey,
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               const SizedBox(height: 20.0),
               TextFormField(
+                decoration: textInputDecoration.copyWith(hintText: 'Email'),
                 validator:(value) => value!.isEmpty ? 'Enter an email' : null,
                 onChanged: (value) {
                   setState(() {
@@ -63,6 +70,7 @@ class _SignInState extends State<SignIn> {
               ),
               const SizedBox(height: 20.0,),
               TextFormField(
+                decoration: textInputDecoration.copyWith(hintText: 'Password'),
                 validator: (value) => value!.length < 6 ? 'Enter a password 6+ characters long' : null,
                 onChanged: (value) {
                   setState(() {
@@ -75,12 +83,22 @@ class _SignInState extends State<SignIn> {
               ElevatedButton(
                 style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.purple[300])),
                 onPressed: () {
-                  setState(() {
+                  setState(() async {
                     if(_formKey.currentState!.validate()){
-
+                      setState(() {
+                        loading = true;
+                      });
                     }
 
-                    error = 'Sign in unsuccessful';
+                    dynamic result = await _auth.signInEmail(email, password);
+
+
+                    if(result == null){
+                      setState(() {
+                        loading = false;
+                        error = 'Login unsuccessful';
+                      });
+                    }
                   });
                 },
                 child: const Text(

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:hour_log/services/auth.dart';
+import 'package:hour_log/shared/constants.dart';
+import 'package:hour_log/shared/loading.dart';
 
 class Register extends StatefulWidget {
   final Function toggleView;
@@ -9,9 +12,13 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
-
+  final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
 
+
+  bool loading = false;
+
+  String username = '';
   String email = '';
   String password = '';
   String confirmPassword = '';
@@ -19,7 +26,7 @@ class _RegisterState extends State<Register> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return loading ? const Loading() : Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         actions: [
@@ -48,9 +55,20 @@ class _RegisterState extends State<Register> {
         child: Form(
           key: _formKey,
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
+              TextFormField(
+                decoration: textInputDecoration.copyWith(hintText: 'Username'),
+                validator:(value) => value!.isEmpty ? 'Enter a username' : null,
+                onChanged: (value) {
+                  setState(() {
+                    username = value;
+                  });
+                },
+              ),
               const SizedBox(height: 20.0),
               TextFormField(
+                decoration: textInputDecoration.copyWith(hintText: 'Email'),
                 validator:(value) => value!.isEmpty ? 'Enter an email' : null,
                 onChanged: (value) {
                   setState(() {
@@ -60,6 +78,7 @@ class _RegisterState extends State<Register> {
               ),
               const SizedBox(height: 20.0,),
               TextFormField(
+                decoration: textInputDecoration.copyWith(hintText: 'Password'),
                 validator: (value) => value!.length < 6 ? 'Enter a password 6+ characters long' : null,
                 onChanged: (value) {
                   setState(() {
@@ -70,6 +89,7 @@ class _RegisterState extends State<Register> {
               ),
               const SizedBox(height: 20.0,),
               TextFormField(
+                decoration: textInputDecoration.copyWith(hintText: 'Confirm Password'),
                 validator: (value) => value != password ? 'Passwords must match' : null,
                 onChanged: (value) {
                   confirmPassword = value;
@@ -79,14 +99,19 @@ class _RegisterState extends State<Register> {
               const SizedBox(height: 20.0,),
               ElevatedButton(
                 style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.purple[300])),
-                onPressed: () {
+                onPressed: () async {
 
                   if(_formKey.currentState!.validate()){
-
+                    loading = true;
                   }
-                  setState(() {
-                    error = 'Sign in unsuccessful';
-                  });
+                  dynamic result = await _auth.signUpEmail(username, email, password);
+
+                  if(result == null){
+                    setState(() {
+                      loading = false;
+                      error = 'Register unsuccessful';
+                    });
+                  }
                 },
                 child: const Text(
                   'Sign In',
