@@ -9,6 +9,7 @@ import 'package:hour_log/models/day.dart';
 import 'package:hour_log/models/organization.dart';
 import 'package:hour_log/models/user.dart';
 import 'package:hour_log/services/database.dart';
+import 'package:hour_log/shared/constants.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -28,6 +29,8 @@ class AuthService {
 
       User? user = result.user;
 
+      createDatabaseService(user!.uid);
+
       return _userFromFirebaseUser(user);
     } catch(e){
       return null;
@@ -40,7 +43,9 @@ class AuthService {
 
       User? user = result.user;
 
-      await DatabaseService(user!.uid).updateUserData(username, List<Organization>.empty(), List<WorkDay>.empty());
+      createDatabaseService(user!.uid);
+
+      await databaseService!.updateUserData(username, List<Organization>.empty(), List<WorkDay>.empty());
 
       return _userFromFirebaseUser(user);
     } catch(e){

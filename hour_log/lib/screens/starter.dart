@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:hour_log/models/user.dart';
 import 'package:hour_log/screens/createOrg/create.dart';
 import 'package:hour_log/screens/home/home.dart';
 import 'package:hour_log/screens/profile/profile.dart';
+import 'package:hour_log/shared/constants.dart';
+import 'package:provider/provider.dart';
 
 class Starter extends StatefulWidget {
   const Starter({super.key});
-
+  
   @override
   State<Starter> createState() => _StarterState();
 }
@@ -18,6 +21,10 @@ class _StarterState extends State<Starter> {
 
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<AppUser?>(context);
+
+    createDatabaseService(user!.uid);
+
     return Scaffold(
       bottomNavigationBar: NavigationBar(
         destinations: const <Widget>[

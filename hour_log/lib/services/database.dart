@@ -1,10 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hour_log/models/day.dart';
 import 'package:hour_log/models/organization.dart';
 import 'package:hour_log/models/user.dart';
 
 class DatabaseService{
   final String uid;
+  final String code = '';
   DatabaseService(this.uid);
 
 
@@ -29,12 +31,18 @@ class DatabaseService{
     );
   }
 
-  Future updateOrganizationData(String name, String code, List<AppUser> members, AppUser owner) async {
-    return await orgCollection.doc(code).set({
+  Future updateOrganizationData(String name, String code, List<UserData> members, UserData owner) async {
+
+    try {
+      return await orgCollection.doc(code).set({
       'name': name,
-      'members': members,
-      'owner': owner
+      'owner': owner,
+      'members': members
     });
+    } catch (e) {
+      print(e);
+      return null;
+    }
   }
 
 }
