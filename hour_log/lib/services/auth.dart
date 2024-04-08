@@ -2,13 +2,10 @@
 
 
 
-import 'dart:math';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hour_log/models/day.dart';
-import 'package:hour_log/models/organization.dart';
 import 'package:hour_log/models/user.dart';
-import 'package:hour_log/services/database.dart';
 import 'package:hour_log/shared/constants.dart';
 
 class AuthService {
@@ -45,7 +42,7 @@ class AuthService {
 
       createDatabaseService(user!.uid);
 
-      await databaseService!.updateUserData(username, List<Organization>.empty(), List<WorkDay>.empty());
+      await databaseService!.updateUserData(username, List<String>.empty(), List<WorkDay>.empty());
 
       return _userFromFirebaseUser(user);
     } catch(e){

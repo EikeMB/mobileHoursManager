@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:hour_log/models/user.dart';
-import 'package:hour_log/screens/authentication/authenticate.dart';
-import 'package:hour_log/screens/home/home.dart';
 import 'package:hour_log/screens/wrapper.dart';
 import 'package:hour_log/services/auth.dart';
-import 'package:hour_log/shared/constants.dart';
-import 'package:hour_log/shared/loading.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 

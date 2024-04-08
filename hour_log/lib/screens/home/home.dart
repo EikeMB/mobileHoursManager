@@ -2,7 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:hour_log/services/auth.dart';
-import 'package:hour_log/shared/constants.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
