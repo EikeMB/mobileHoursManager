@@ -31,13 +31,21 @@ class DatabaseService{
     );
   }
 
-  Future updateOrganizationData(String name, String code, List<UserData> members, UserData owner) async {
+  Future updateOrganizationData(String name, String code, List<AppUser> members, AppUser owner) async {
+    Organization org = Organization(name, code, members, owner);
+
+    Map<String, dynamic> ownerMap = {
+      'uid': owner.uid
+    };
+
+    var membersMap = Map.fromIterable(members,
+      key: (e) => 'uid', value: (e) => e.uid);
 
     try {
       return await orgCollection.doc(code).set({
       'name': name,
-      'owner': owner,
-      'members': members
+      'owner': ownerMap,
+      'members': membersMap
     });
     } catch (e) {
       print(e);

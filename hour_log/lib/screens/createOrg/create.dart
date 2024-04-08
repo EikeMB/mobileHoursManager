@@ -28,7 +28,7 @@ class _CreateOrgState extends State<CreateOrg> {
   @override
   Widget build(BuildContext context) {
 
-    final user = Provider.of<UserData?>(context);
+    final user = Provider.of<AppUser?>(context);
 
     return loading ? const Loading() : Scaffold(
       appBar: AppBar(
@@ -81,8 +81,8 @@ class _CreateOrgState extends State<CreateOrg> {
 
                     String code = generateRandomString(4);
 
-                    List<UserData> members = [user!];
-                    UserData owner = user;
+                    List<AppUser> members = [user!];
+                    AppUser owner = user;
                     dynamic result = await databaseService!.updateOrganizationData(name, code, members, owner);
 
 
