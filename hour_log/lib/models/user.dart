@@ -1,3 +1,6 @@
+import 'package:hour_log/models/day.dart';
+import 'package:hour_log/models/organization.dart';
+
 class AppUser{
   final String uid;
 
@@ -8,8 +11,8 @@ class AppUser{
 class UserData{
   final String uid;
   final String username;
-  final List<String> orgs;
-  final double hours;
+  final List<Organization> orgs;
+  final List<WorkDay> workDays;
 
-  UserData(this.uid, this.username, this.orgs, this.hours);
+  UserData(this.uid, this.username, this.orgs, this.workDays);
 }
