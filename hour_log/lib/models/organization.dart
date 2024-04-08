@@ -8,4 +8,5 @@ class Organization {
   UserData owner;
 
   Organization(this.name, this.code, this.members, this.owner);
+  
 }

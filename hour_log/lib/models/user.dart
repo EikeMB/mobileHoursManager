@@ -27,4 +27,13 @@ class UserData{
       'workdays': workDays.map((workDay) => workDay.getMapFromWorkDay()).toList()
     };
   }
+
+  static UserData getUserDataFromMap(Map<String,  dynamic> map){
+    String name = map['name'];
+    List<String> orgs = List.from(map['organizations']);
+    String uid = map['uid'];
+    List<WorkDay> days = map['workdays'].isEmpty ? List<WorkDay>.empty() : map['workdays'].forEach((day) => WorkDay.dayFromMap(day));
+
+    return UserData(uid, name, orgs, days);
+  }
 }

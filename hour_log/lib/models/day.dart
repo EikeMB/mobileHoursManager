@@ -16,7 +16,16 @@ class WorkDay{
       'startTime': startTime.toUtc().toString(),
       'endTime': endTime.toUtc().toString(),
       'breakTime': breakTime.toString(),
-      'totalTime': totalTime.toString()
     };
+  }
+
+  static WorkDay dayFromMap(Map<String, dynamic> map){
+
+    List<String> splitDuration = map['breakTime'].split(':');
+    int hours = int.parse(splitDuration[0]);
+    int minutes = int.parse(splitDuration[1]);
+    int seconds = int.parse(splitDuration[2].split('.')[0]); // remove milliseconds part
+    Duration parsedDuration = Duration(hours: hours, minutes: minutes, seconds: seconds);
+    return WorkDay(DateTime.parse(map['startTime']), DateTime.parse(map['endTime']), parsedDuration);
   }
 }

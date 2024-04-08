@@ -1,7 +1,10 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:hour_log/models/organization.dart';
+import 'package:hour_log/screens/home/orgCard.dart';
 import 'package:hour_log/services/auth.dart';
+import 'package:provider/provider.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -16,6 +19,8 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+
+    final orgs = Provider.of<List<Organization>?>(context);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.purple[200],
@@ -37,6 +42,9 @@ class _HomeState extends State<Home> {
           )
         ],
         title: const Text('Home'),
+      ),
+      body: Column(
+        children: orgs != null ? orgs.map((org) => OrgCard(org)).toList() : [const Text('no orgs')],
       ),
     );
   }

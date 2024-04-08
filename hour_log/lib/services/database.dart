@@ -42,7 +42,40 @@ class DatabaseService{
     return userData;
   }
 
-  
+  Stream<List<Organization>> get orgs {
+
+    return orgCollection.snapshots().map(_orgsFromSnapshot);
+  }
+
+  List<Organization> _orgsFromSnapshot(QuerySnapshot snapshot){
+    List<Organization> orgs = [];
+    List<Organization> userOrgs = [];
+
+    var queryDocs = snapshot.docs;
+    List<UserData> members = [];
+    for (var element in queryDocs) {
+      String name = element['name'];
+      String code = element.id;
+      UserData owner = UserData.getUserDataFromMap(element['owner']);
+      element['members'].forEach((member) => members.add(UserData.getUserDataFromMap(member)));
+
+      orgs.add(Organization(name, code, members, owner));
+    }
+    for (var org in orgs) {
+      if(org.owner.uid == uid){
+        userOrgs.add(org);
+      }
+      else{
+        for (var member in org.members) {
+          if(member.uid == uid){
+            userOrgs.add(org);
+          }
+        }
+      }
+
+    }
+    return userOrgs;
+  }
 
   Future updateOrganizationData(String name, String code, List<UserData> members, UserData owner) async {
     Organization org = Organization(name, code, members, owner);
@@ -66,5 +99,7 @@ class DatabaseService{
       return null;
     }
   }
+
+  
 
 }

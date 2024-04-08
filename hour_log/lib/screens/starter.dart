@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hour_log/models/organization.dart';
 import 'package:hour_log/models/user.dart';
 import 'package:hour_log/screens/createOrg/create.dart';
 import 'package:hour_log/screens/home/home.dart';
@@ -41,7 +42,7 @@ class _StarterState extends State<Starter> {
         },
       ),
       body: <Widget>[
-        const Home(),
+        StreamProvider<List<Organization>?>.value(value: databaseService!.orgs, initialData: null, child: const Home(),),
         StreamProvider<UserData?>.value(initialData: null, value: databaseService!.userData, child: const CreateOrg(),),
         const Profile()
       ][_selectedIndex],
