@@ -1,17 +1,14 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:hour_log/services/auth.dart';
-import 'package:hour_log/shared/constants.dart';
 
-class Home extends StatefulWidget {
-  const Home({super.key});
+class Profile extends StatefulWidget {
+  const Profile({super.key});
 
   @override
-  State<Home> createState() => _HomeState();
+  State<Profile> createState() => _ProfileState();
 }
 
-class _HomeState extends State<Home> {
+class _ProfileState extends State<Profile> {
 
   final AuthService _auth = AuthService();
 
@@ -37,7 +34,7 @@ class _HomeState extends State<Home> {
             ),
           )
         ],
-        title: const Text('Home'),
+        title: const Text('Profile'),
       ),
     );
   }

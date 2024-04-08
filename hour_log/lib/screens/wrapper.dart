@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:hour_log/models/user.dart';
 import 'package:hour_log/screens/authentication/authenticate.dart';
 import 'package:hour_log/screens/home/home.dart';
+import 'package:hour_log/screens/starter.dart';
 import 'package:provider/provider.dart';
 
 class Wrapper extends StatelessWidget {
@@ -14,7 +15,6 @@ class Wrapper extends StatelessWidget {
 
     final user = Provider.of<AppUser?>(context);
 
-
-    return user != null ? const Home() : const Authenticate();
+    return user != null ? const Starter() : const Authenticate();
   }
 }

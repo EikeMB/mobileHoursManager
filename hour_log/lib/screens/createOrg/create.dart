@@ -1,20 +1,16 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:hour_log/services/auth.dart';
-import 'package:hour_log/shared/constants.dart';
 
-class Home extends StatefulWidget {
-  const Home({super.key});
+class CreateOrg extends StatefulWidget {
+  const CreateOrg({super.key});
 
   @override
-  State<Home> createState() => _HomeState();
+  State<CreateOrg> createState() => _CreateOrgState();
 }
 
-class _HomeState extends State<Home> {
+class _CreateOrgState extends State<CreateOrg> {
 
   final AuthService _auth = AuthService();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,7 +33,7 @@ class _HomeState extends State<Home> {
             ),
           )
         ],
-        title: const Text('Home'),
+        title: const Text('Create Org'),
       ),
     );
   }
