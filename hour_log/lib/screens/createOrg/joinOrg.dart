@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hour_log/models/organization.dart';
 import 'package:hour_log/models/user.dart';
 import 'package:hour_log/services/auth.dart';
 import 'package:hour_log/shared/constants.dart';
@@ -20,13 +21,13 @@ class _JoinOrgState extends State<JoinOrg> {
   bool loading = false;
 
 
-  String name = '';
+  String code = '';
   String error ='';
 
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<UserData?>(context);
-
+    final orgs = Provider.of<List<Organization>?>(context);
     return loading ? const Loading() : Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.purple[200],
@@ -46,7 +47,7 @@ class _JoinOrgState extends State<JoinOrg> {
                 validator:(value) => value!.isEmpty ? 'Enter the code for the organization' : null,
                 onChanged: (value) {
                   setState(() {
-                    name = value;
+                    code = value;
                   });
                 },
               ),
@@ -59,24 +60,85 @@ class _JoinOrgState extends State<JoinOrg> {
                         loading = true;
                       });
                     }
+                    Organization? org;
 
+                    for(Organization orgCheck in orgs!){
+                      if(orgCheck.code == code){
+                        org = orgCheck;
+                        break;
+                      }
+                    }
 
-                    dynamic result = null;
+                    if(org != null){
+                      bool alreadyIn = false;
+                      if(org.owner.uid == user!.uid){
+                        alreadyIn = true;
+                      }
+                      for(UserData member in org.members){
+                        if(member.uid == user.uid){
+                          alreadyIn = true;
+                          
+                          break;
+                        }
+                      }
 
+                      if(!alreadyIn){
+                        user.orgs.add(org.code);
 
-                    if(result == null){
+                        org.members.add(user);
+
+                        dynamic resultUser = databaseService!.updateUserData(user.username, user.orgs, user.workDays);
+
+                        dynamic resultOrg = databaseService!.updateOrganizationData(org.name, code, org.members, org.owner);
+
+                        if(resultOrg == null){
+                          setState(() {
+                          loading = false;
+                          error = 'Adding org unsuccessful';
+                          });
+                        }
+                        if(resultUser == null){
+                          setState(() {
+                          loading = false;
+                          error = 'Adding org to user unsuccessful';
+                          });
+                        } 
+                      }
+                      else{
+                        setState(() {
+                          loading = false;
+                          error = 'Already in the org';
+                          });
+                      }
+                      
+                    }
+                    else{
                       setState(() {
                         loading = false;
-                        error = 'Login unsuccessful';
+                        error = 'Org does not exist';
                       });
+                    }
+
                     
-                  }
-                },
+
+                    if(error == ''){
+                      Navigator.pop(context);
+                    }
+                  
+                                },
                 child: const Text(
                   'Join',
                   style: TextStyle(color: Colors.white),
                 ),
               ),
+              const SizedBox(height: 16.0,),
+              Text(
+                error,
+                style: const TextStyle(
+                  color: Colors.red,
+                  fontSize: 14.0
+                ),
+              )
             ],
           ),
         ),

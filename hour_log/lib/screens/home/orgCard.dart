@@ -16,7 +16,7 @@ class _OrgCardState extends State<OrgCard> {
   Widget build(BuildContext context) {
     final user = Provider.of<UserData?>(context);
 
-    Duration totalTime = Duration();
+    Duration totalTime = const Duration();
 
     if(user != null){
       for (var element in user.workDays) 

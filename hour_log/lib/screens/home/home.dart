@@ -58,7 +58,9 @@ class _HomeState extends State<Home> {
           FloatingActionButton.extended(
             onPressed: () {
               showModalBottomSheet(context: context, builder: (context){
-                return StreamProvider<UserData?>.value(initialData: null, value: databaseService!.userData, child: const JoinOrg(),);
+                return MultiProvider(providers: [StreamProvider<UserData?>.value(initialData: null, value: databaseService!.userData, child: const JoinOrg(),),
+                StreamProvider<List<Organization>?>.value(initialData: null, value: databaseService!.allOrgs, child: const JoinOrg(),)],
+                child: const JoinOrg(),);
               });
             },
             icon: const Icon(Icons.add),

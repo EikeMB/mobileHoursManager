@@ -43,18 +43,23 @@ class DatabaseService{
     return userData;
   }
 
+  Stream<List<Organization>> get allOrgs {
+
+    return orgCollection.snapshots().map(_allOrgsFromSnapshot);
+  }
+
   Stream<List<Organization>> get orgs {
 
     return orgCollection.snapshots().map(_orgsFromSnapshot);
   }
 
-  List<Organization> _orgsFromSnapshot(QuerySnapshot snapshot){
+  List<Organization> _allOrgsFromSnapshot(QuerySnapshot snapshot){
     List<Organization> orgs = [];
-    List<Organization> userOrgs = [];
 
     var queryDocs = snapshot.docs;
-    List<UserData> members = [];
+    
     for (var element in queryDocs) {
+      List<UserData> members = [];
       String name = element['name'];
       String code = element.id;
       UserData owner = UserData.getUserDataFromMap(element['owner']);
@@ -62,20 +67,34 @@ class DatabaseService{
 
       orgs.add(Organization(name, code, members, owner));
     }
-    for (var org in orgs) {
+    return orgs;
+  }
+
+  List<Organization> _orgsFromSnapshot(QuerySnapshot snapshot){
+    List<Organization> orgs = [];
+
+    var queryDocs = snapshot.docs;
+   
+    for (var element in queryDocs) {
+      List<UserData> members = [];
+      String name = element['name'];
+      String code = element.id;
+      UserData owner = UserData.getUserDataFromMap(element['owner']);
+      element['members'].forEach((member) => members.add(UserData.getUserDataFromMap(member)));
+      
+      Organization org = Organization(name, code, members, owner);
       if(org.owner.uid == uid){
-        userOrgs.add(org);
+        orgs.add(org);
       }
       else{
         for (var member in org.members) {
           if(member.uid == uid){
-            userOrgs.add(org);
+            orgs.add(org);
           }
         }
       }
-
     }
-    return userOrgs;
+    return orgs;
   }
 
   Future updateOrganizationData(String name, String code, List<UserData> members, UserData owner) async {

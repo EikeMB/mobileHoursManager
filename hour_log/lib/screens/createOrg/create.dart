@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hour_log/models/organization.dart';
 import 'package:hour_log/models/user.dart';
 import 'package:hour_log/services/auth.dart';
 import 'package:hour_log/shared/constants.dart';
@@ -68,21 +69,32 @@ class _CreateOrgState extends State<CreateOrg> {
                     List<UserData> members = [];
                     UserData owner = user!;
                     dynamic result = await databaseService!.updateOrganizationData(name, code, members, owner);
-
-
+                    user.orgs.add(code);
+                    dynamic resultUser = await databaseService!.updateUserData(user.username, user.orgs, user.workDays);
+                    
                     if(result == null){
                       setState(() {
                         loading = false;
-                        error = 'Login unsuccessful';
+                        error = 'Create unsuccessful';
                       });
                     
-                  }
+                    }
+
+                    Navigator.pop(context);
                 },
                 child: const Text(
                   'Create',
                   style: TextStyle(color: Colors.white),
                 ),
               ),
+              const SizedBox(height: 16.0,),
+              Text(
+                error,
+                style: const TextStyle(
+                  color: Colors.red,
+                  fontSize: 14.0
+                ),
+              )
             ],
           ),
         ),
