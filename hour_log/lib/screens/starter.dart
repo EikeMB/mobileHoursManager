@@ -30,7 +30,6 @@ class _StarterState extends State<Starter> {
       bottomNavigationBar: NavigationBar(
         destinations: const <Widget>[
           NavigationDestination(icon: Icon(Icons.home_filled), label: 'Home', selectedIcon: Icon(Icons.home_filled)),
-          NavigationDestination(icon: Icon(Icons.add), label: 'Create Org', selectedIcon: Icon(Icons.add_outlined)),
           NavigationDestination(icon: Icon(Icons.person), label: 'Profile', selectedIcon: Icon(Icons.person)),
         ],
         indicatorColor: Colors.purple[100],
@@ -43,7 +42,6 @@ class _StarterState extends State<Starter> {
       ),
       body: <Widget>[
         StreamProvider<List<Organization>?>.value(value: databaseService!.orgs, initialData: null, child: const Home(),),
-        StreamProvider<UserData?>.value(initialData: null, value: databaseService!.userData, child: const CreateOrg(),),
         const Profile()
       ][_selectedIndex],
     );

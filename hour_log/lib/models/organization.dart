@@ -9,4 +9,5 @@ class Organization {
 
   Organization(this.name, this.code, this.members, this.owner);
   
+
 }

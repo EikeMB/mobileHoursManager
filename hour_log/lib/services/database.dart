@@ -26,11 +26,12 @@ class DatabaseService{
     var workDaysFromSnapshot = snapshot.get('workdays') as List<dynamic>;
     for (var workDayMap in workDaysFromSnapshot) {
       if (workDayMap is Map<String, dynamic>) {
+        String org = workDayMap['organization'];
         DateTime startTime = DateTime.fromMillisecondsSinceEpoch(workDayMap['startTime']);
         DateTime endTime = DateTime.fromMillisecondsSinceEpoch(workDayMap['endTime']);
         Duration breakTime = Duration(milliseconds: workDayMap['breakTime']);
       
-        workDays.add(WorkDay(startTime, endTime, breakTime));
+        workDays.add(WorkDay(org, startTime, endTime, breakTime));
       }
     }
 
