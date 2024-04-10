@@ -47,8 +47,10 @@ class _HomeState extends State<Home> {
         ],
         title: const Text('Home'),
       ),
-      body: Column(
-        children: orgs != null ? orgs.map((org) => StreamProvider.value(value: databaseService?.userData, initialData: null, child: OrgCard(org),)).toList()  : [const Text('no orgs')],
+      body: SingleChildScrollView(
+        child: Column(
+          children: orgs != null ? orgs.map((org) => StreamProvider.value(value: databaseService?.userData, initialData: null, child: OrgCard(org),)).toList()  : [const Text('no orgs')],
+        ),
       ),
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,
