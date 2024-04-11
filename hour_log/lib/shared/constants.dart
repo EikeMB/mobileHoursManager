@@ -32,3 +32,14 @@ String generateRandomString(int length) {
 
   return randomString;
 }
+
+Color getUsernameColor(String username) {
+  final int hash = username.codeUnits.fold(0, (int prev, int curr) => prev + curr);
+  final Random random = Random(hash);
+  return Color.fromRGBO(
+    random.nextInt(256), // R value
+    random.nextInt(256), // G value
+    random.nextInt(256), // B value
+    1, // Opacity
+  );
+}

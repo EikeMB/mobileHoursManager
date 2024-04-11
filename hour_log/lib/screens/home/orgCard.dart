@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hour_log/models/organization.dart';
 import 'package:hour_log/models/user.dart';
 import 'package:hour_log/screens/org/orgMain.dart';
+import 'package:hour_log/shared/constants.dart';
 import 'package:provider/provider.dart';
 
 class OrgCard extends StatefulWidget {
@@ -36,7 +37,11 @@ class _OrgCardState extends State<OrgCard> {
         color: Colors.purple[50],
         child: InkWell(
           onTap: () {
-            Navigator.of(context).push(MaterialPageRoute(builder: (context) => Org(widget.org)));
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) => StreamProvider<UserData?>.value(
+              initialData: null,
+              value: databaseService!.userData,
+              child: Org(widget.org),
+            )));
           },
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
