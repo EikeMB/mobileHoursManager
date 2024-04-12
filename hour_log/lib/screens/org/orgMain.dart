@@ -26,6 +26,20 @@ class _OrgState extends State<Org> {
   TimeOfDay? endTime;
   Duration? breakTime;
 
+  
+
+  List<UserData> _getTopThree(Organization org){
+    List<UserData> members = [];
+    for(UserData member in org.members){
+      members.add(member);
+    }
+    members.add(org.owner);
+    members.sort((b, a) => org.getUserTotalHours(a.uid).compareTo(org.getUserTotalHours(b.uid)));
+
+    return members;
+  }
+
+
   Future<void> _pickDate(BuildContext context) async {
     final DateTime? pickedDate = await showDatePicker(
       context: context,
@@ -89,10 +103,12 @@ class _OrgState extends State<Org> {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<UserData?>(context);
+
+    List<UserData> topThree = _getTopThree(widget.org);
     final Duration totalTime = widget.org.getTotalHours();
     final Duration myTotalTime = user !=null ? widget.org.getUserTotalHours(user.uid) : const Duration();
-    String sDuration = "${myTotalTime.inHours}:${myTotalTime.inMinutes.remainder(60)}"; 
-    String sTotalDuration = "${totalTime.inHours}:${totalTime.inMinutes.remainder(60)}"; 
+    String sDuration = "${myTotalTime.inHours}H:${myTotalTime.inMinutes.remainder(60)}"; 
+    String sTotalDuration = "${totalTime.inHours}H:${totalTime.inMinutes.remainder(60)}"; 
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.purple[200],
@@ -148,10 +164,51 @@ class _OrgState extends State<Org> {
                     fontStyle: FontStyle.italic 
                   ),
               ),
-              const SizedBox(height: 250.0,),
+              const SizedBox(height: 50.0,),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Column(
+                    children: [
+                      CircleAvatar(
+                        radius: 35,
+                        backgroundColor: getUsernameColor(topThree[1].username),
+                        child: Text(topThree[1].username.substring(0, 2).toUpperCase(), style: const TextStyle(fontSize: 20.0, letterSpacing: 2.5)),
+                      ),
+                      Container(color: Colors.red[400], height: 40.0, width: 100.0,),
+                      
+                    ],
+                  ),
+                  Column(
+                    children: [
+                      CircleAvatar(
+                        radius: 35,
+                        backgroundColor: getUsernameColor(topThree[0].username),
+                        child: Text(topThree[0].username.substring(0, 2).toUpperCase(), style: const TextStyle(fontSize: 20.0, letterSpacing: 2.5)),
+                      ),
+                      Container(color: Colors.red[400], height: 70.0, width: 100.0,),
+                      
+                    ],
+                  ),
+                  Column(
+                    children: [
+                      CircleAvatar(
+                        radius: 35,
+                        backgroundColor: getUsernameColor(topThree[2].username),
+                        child: Text(topThree[2].username.substring(0, 2).toUpperCase(), style: const TextStyle(fontSize: 20.0, letterSpacing: 2.5)),
+                      ),
+                      Container(color: Colors.red[400], height: 20.0, width: 100.0,),
+                      
+                    ],
+                  ),
+                ],
+              ),
+              const SizedBox(height: 70.0,),
               const Text('Members:', style: TextStyle(fontSize: 20.0),),
               const SizedBox(height: 10.0,),
               SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
                 child: Row(
                   children: 
                     widget.org.members.isNotEmpty ? widget.org.members.map((member) => 
