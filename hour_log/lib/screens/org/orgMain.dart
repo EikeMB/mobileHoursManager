@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:hour_log/models/day.dart';
 import 'package:hour_log/models/organization.dart';
 import 'package:hour_log/models/user.dart';
+import 'package:hour_log/screens/org/userHours.dart';
 import 'package:hour_log/services/auth.dart';
 import 'package:hour_log/shared/constants.dart';
 import 'package:provider/provider.dart';
@@ -130,7 +131,7 @@ class _OrgState extends State<Org> {
             ),
           )
         ],
-        title: const Text('Home'),
+        title: const Text('Organization'),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
@@ -168,7 +169,7 @@ class _OrgState extends State<Org> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
+                children: topThree.isEmpty ? const [Text("No Users")] : [
                   Column(
                     children: [
                       CircleAvatar(
@@ -212,10 +213,15 @@ class _OrgState extends State<Org> {
                 child: Row(
                   children: 
                     widget.org.members.isNotEmpty ? widget.org.members.map((member) => 
-                    CircleAvatar(
-                      radius: 35,
-                      backgroundColor: getUsernameColor(member.username),
-                      child: Text(member.username.substring(0, 2).toUpperCase(), style: const TextStyle(fontSize: 20.0, letterSpacing: 2.5)),
+                    InkWell(
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => UserHours(widget.org, member)));
+                      },
+                      child: CircleAvatar(
+                        radius: 35,
+                        backgroundColor: getUsernameColor(member.username),
+                        child: Text(member.username.substring(0, 2).toUpperCase(), style: const TextStyle(fontSize: 20.0, letterSpacing: 2.5)),
+                      ),
                     )).expand((widget) => [widget, const SizedBox(width: 15,)]).toList() : [const Text('No Members')]
                     
                 ),
@@ -223,11 +229,16 @@ class _OrgState extends State<Org> {
               const SizedBox(height: 10.0,),
               const Text('Owner:', style: TextStyle(fontSize: 20.0),),
               const SizedBox(height: 10.0,),
-              CircleAvatar(
-                    radius: 35,
-                    backgroundColor: Colors.lightBlue[100],
-                    child: Text(widget.org.owner.username.substring(0, 2).toUpperCase(), style: const TextStyle(fontSize: 20.0, letterSpacing: 2.5)),
-                  )
+              InkWell(
+                onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => UserHours(widget.org, widget.org.owner)));
+                },
+                child: CircleAvatar(
+                      radius: 35,
+                      backgroundColor: Colors.lightBlue[100],
+                      child: Text(widget.org.owner.username.substring(0, 2).toUpperCase(), style: const TextStyle(fontSize: 20.0, letterSpacing: 2.5)),
+                    ),
+              )
             ],
           ),
         ),
