@@ -43,3 +43,14 @@ Color getUsernameColor(String username) {
     1, // Opacity
   );
 }
+
+Duration parseDuration(String stringDuration){
+    List<String> splitDuration = stringDuration.split(':');
+
+    int hours = 0, minutes = 0, seconds = 0;
+
+    hours = int.parse(splitDuration[0]);
+    minutes = int.parse(splitDuration[1]);
+
+    return Duration(hours: hours, minutes: minutes);
+}

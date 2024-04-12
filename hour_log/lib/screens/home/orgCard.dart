@@ -18,7 +18,7 @@ class _OrgCardState extends State<OrgCard> {
   Widget build(BuildContext context) {
     final user = Provider.of<UserData?>(context);
 
-    Duration totalTime = const Duration();
+    Duration totalTime = user != null ? widget.org.getUserTotalHours(user.uid) : const Duration();
 
     if(user != null){
       for (var element in user.workDays) 
@@ -58,7 +58,7 @@ class _OrgCardState extends State<OrgCard> {
                 ],
               ),
               const SizedBox(height: 20.0,),
-              Text("Total time worked: ${totalTime.inHours}"),
+              Text("Total time worked: ${totalTime.inHours}:${totalTime.inMinutes%60}"),
               const SizedBox(height: 20.0,),
               Text("Join using code: ${widget.org.code}"),
               

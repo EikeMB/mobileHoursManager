@@ -1,6 +1,8 @@
+import 'package:duration_picker/duration_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:hour_log/models/day.dart';
 import 'package:hour_log/models/organization.dart';
 import 'package:hour_log/models/user.dart';
 import 'package:hour_log/services/auth.dart';
@@ -17,7 +19,72 @@ class Org extends StatefulWidget {
 
 class _OrgState extends State<Org> {
   final AuthService _auth = AuthService();
-  
+
+
+  DateTime? selectedDate;
+  TimeOfDay? startTime;
+  TimeOfDay? endTime;
+  Duration? breakTime;
+
+  Future<void> _pickDate(BuildContext context) async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: selectedDate ?? DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2100),
+    );
+
+    if (pickedDate != null && pickedDate != selectedDate) {
+      setState(() {
+        selectedDate = pickedDate;
+      });
+
+      // After date is picked, pick the start time
+      await _pickStartTime(context);
+    }
+  }
+
+  Future<void> _pickStartTime(BuildContext context) async {
+    final TimeOfDay? pickedStartTime = await showTimePicker(
+      context: context,
+      initialTime: startTime ?? TimeOfDay.now(),
+    );
+
+    if (pickedStartTime != null && pickedStartTime != startTime) {
+      setState(() {
+        startTime = pickedStartTime;
+      });
+
+      // After start time is picked, pick the end time
+      await _pickEndTime(context);
+    }
+  }
+
+  Future<void> _pickEndTime(BuildContext context) async {
+    final TimeOfDay? pickedEndTime = await showTimePicker(
+      context: context,
+      initialTime: endTime ?? TimeOfDay.now(),
+    );
+
+    if (pickedEndTime != null && pickedEndTime != endTime) {
+      setState(() {
+        endTime = pickedEndTime;
+      });
+
+      await _pickDuration(context);
+    }
+  }
+
+
+  Future<void> _pickDuration(BuildContext context) async {
+    final Duration? pickedDuration = await showDurationPicker(context: context, initialTime: breakTime ?? const Duration(minutes: 30));
+
+    if(pickedDuration != null && pickedDuration != breakTime){
+      setState(() {
+        breakTime = pickedDuration;
+      });
+    }
+  }
   
   @override
   Widget build(BuildContext context) {
@@ -74,7 +141,7 @@ class _OrgState extends State<Org> {
                   fontSize: 20.0,
                   fontStyle: FontStyle.italic 
                 ),),
-                Text('My org work time: $sTotalDuration',
+                Text('My org work time: $sDuration',
                 style: const TextStyle(
                   fontSize: 20.0,
                   fontStyle: FontStyle.italic 
@@ -110,8 +177,37 @@ class _OrgState extends State<Org> {
       floatingActionButton: Padding(
         padding: const EdgeInsets.all(8.0),
         child: FloatingActionButton(
-          onPressed: () {
-            
+          onPressed: () async {
+            await _pickDate(context);
+
+            if(selectedDate != null && startTime != null && endTime != null && breakTime != null && user != null){
+              DateTime startDateTime = DateTime(selectedDate!.year, selectedDate!.month, selectedDate!.day, startTime!.hour, startTime!.minute);
+              DateTime endDateTime = DateTime(selectedDate!.year, selectedDate!.month, selectedDate!.day, endTime!.hour, endTime!.minute);
+
+              user.workDays.add(WorkDay(widget.org.code, startDateTime, endDateTime, breakTime!));
+
+              if(widget.org.owner.uid == user.uid){
+                widget.org.owner = user;
+              }
+              else{
+                List<UserData> members = [];
+                for(UserData member in widget.org.members){
+                  if(member.uid == user.uid){
+                    members.add(user);
+                  }
+                  else{
+                    members.add(member);
+                  }
+                }
+                widget.org.members = members;
+              }
+
+              dynamic resultUser = await databaseService!.updateUserData(user.username, user.orgs, user.workDays);
+              dynamic resultOrg = await databaseService!.updateOrganizationData(widget.org.name, widget.org.code, widget.org.members, widget.org.owner);
+
+              print(resultUser);
+              print(resultOrg);
+            }
           },
           child: const Icon(Icons.add),
         ),

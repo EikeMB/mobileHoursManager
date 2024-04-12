@@ -32,7 +32,15 @@ class UserData{
     String name = map['name'];
     List<String> orgs = List.from(map['organizations']);
     String uid = map['uid'];
-    List<WorkDay> days = map['workdays'].isEmpty ? List<WorkDay>.empty() : map['workdays'].forEach((day) => WorkDay.dayFromMap(day));
+    List<WorkDay> days = [];
+    if(map['workdays'].isEmpty){
+      days = List<WorkDay>.empty();
+    }
+    else{
+      for(Map<String, dynamic> map in map['workdays']){
+        days.add(WorkDay.dayFromMap(map));
+      }
+    }
 
     return UserData(uid, name, orgs, days);
   }

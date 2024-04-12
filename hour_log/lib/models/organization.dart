@@ -12,6 +12,11 @@ class Organization {
   
   Duration getTotalHours(){
     Duration totalTime = const Duration();
+    for(WorkDay day in owner.workDays){
+        if(day.org == code){
+          totalTime += day.totalTime;
+        }
+    }
     for(UserData member in members){
       for(WorkDay day in member.workDays){
         if(day.org == code){
@@ -30,7 +35,7 @@ class Organization {
         if(day.org == code){
           totalTime += day.totalTime;
         }
-    }
+      }
     }
     else{
       for(UserData member in members){

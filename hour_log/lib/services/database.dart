@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hour_log/models/day.dart';
 import 'package:hour_log/models/organization.dart';
 import 'package:hour_log/models/user.dart';
+import 'package:hour_log/shared/constants.dart';
 
 class DatabaseService{
   final String uid;
@@ -26,12 +27,8 @@ class DatabaseService{
     var workDaysFromSnapshot = snapshot.get('workdays') as List<dynamic>;
     for (var workDayMap in workDaysFromSnapshot) {
       if (workDayMap is Map<String, dynamic>) {
-        String org = workDayMap['organization'];
-        DateTime startTime = DateTime.fromMillisecondsSinceEpoch(workDayMap['startTime']);
-        DateTime endTime = DateTime.fromMillisecondsSinceEpoch(workDayMap['endTime']);
-        Duration breakTime = Duration(milliseconds: workDayMap['breakTime']);
       
-        workDays.add(WorkDay(org, startTime, endTime, breakTime));
+        workDays.add(WorkDay.dayFromMap(workDayMap));
       }
     }
 
