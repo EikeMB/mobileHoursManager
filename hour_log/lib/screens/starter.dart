@@ -41,7 +41,7 @@ class _StarterState extends State<Starter> {
       ),
       body: <Widget>[
         StreamProvider<List<Organization>?>.value(value: databaseService!.orgs, initialData: null, child: const Home(),),
-        const Profile()
+        StreamProvider<UserData?>.value(initialData: null, value: databaseService!.userData, child: const Profile(),)
       ][_selectedIndex],
     );
   }

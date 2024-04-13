@@ -1,19 +1,19 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hour_log/models/organization.dart';
 import 'package:hour_log/models/user.dart';
-import 'package:hour_log/services/auth.dart';
 import 'package:hour_log/shared/constants.dart';
 import 'package:hour_log/shared/loading.dart';
 import 'package:provider/provider.dart';
 
-class CreateOrg extends StatefulWidget {
-  const CreateOrg({super.key});
+class ChangeUserName extends StatefulWidget {
+  const ChangeUserName({super.key});
 
   @override
-  State<CreateOrg> createState() => _CreateOrgState();
+  State<ChangeUserName> createState() => _ChangeUserNameState();
 }
 
-class _CreateOrgState extends State<CreateOrg> {
+class _ChangeUserNameState extends State<ChangeUserName> {
 
   final _formKey = GlobalKey<FormState>();
 
@@ -23,20 +23,17 @@ class _CreateOrgState extends State<CreateOrg> {
   String name = '';
   String error ='';
 
-  
-
   @override
   Widget build(BuildContext context) {
-
     final user = Provider.of<UserData?>(context);
-
+    final orgs = Provider.of<List<Organization>?>(context);
     return loading ? const Loading() : Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.purple[200],
         
-        title: const Text('Create Org'),
+        title: const Text('Change Username'),
       ),
-      body: Container(
+      body: user != null ? Container(
         padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
         child: Form(
           key: _formKey,
@@ -45,8 +42,8 @@ class _CreateOrgState extends State<CreateOrg> {
             children: <Widget>[
               const SizedBox(height: 20.0),
               TextFormField(
-                decoration: textInputDecoration.copyWith(hintText: 'Organization Name'),
-                validator:(value) => value!.isEmpty ? 'Enter a name for the organization' : null,
+                decoration: textInputDecoration.copyWith(hintText: 'Username'),
+                validator:(value) => value!.isEmpty ? 'Enter a new username' : null,
                 onChanged: (value) {
                   setState(() {
                     name = value;
@@ -63,18 +60,33 @@ class _CreateOrgState extends State<CreateOrg> {
                       });
                     }
 
-                    String code = generateRandomString(4);
+                    dynamic result = await databaseService!.updateUserData(name, user.orgs, user.workDays);
+                    dynamic resultOrg;
+                    if(orgs != null){
+                      for(Organization org in orgs){
+                        if(org.owner.uid == user.uid){
+                          resultOrg = await databaseService!.updateOrganizationData(org.name, org.code, org.members, UserData(user.uid, name, user.orgs, user.workDays));
 
-                    List<UserData> members = [];
-                    UserData owner = user!;
-                    dynamic result = await databaseService!.updateOrganizationData(name, code, members, owner);
-                    user.orgs.add(code);
-                    dynamic resultUser = await databaseService!.updateUserData(user.username, user.orgs, user.workDays);
+                        }
+                        else{
+                          List<UserData> members = [];
+                          for(UserData member in org.members){
+                            if(member.uid == user.uid){
+                              members.add(UserData(member.uid, name, member.orgs, member.workDays));
+                            }
+                            else{
+                              members.add(member);
+                            }
+                          }
+                          resultOrg = await databaseService!.updateOrganizationData(org.name, org.code, members, org.owner);
+                        }
+                      }
+                    }
                     
-                    if(result == null){
+                    if(result == null || resultOrg == null){
                       setState(() {
                         loading = false;
-                        error = 'Create unsuccessful';
+                        error = 'Username update unsuccessful';
                       });
                     
                     }
@@ -82,7 +94,7 @@ class _CreateOrgState extends State<CreateOrg> {
                     Navigator.pop(context);
                 },
                 child: const Text(
-                  'Create',
+                  'Change',
                   style: TextStyle(color: Colors.white),
                 ),
               ),
@@ -97,7 +109,7 @@ class _CreateOrgState extends State<CreateOrg> {
             ],
           ),
         ),
-      ),
+      ) : null,
     );
   }
 }

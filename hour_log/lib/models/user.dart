@@ -25,6 +25,17 @@ class UserData{
     }
   }
 
+  Duration getTotalHours(){
+    Duration total = const Duration();
+
+    for(WorkDay day in workDays){
+      total += day.totalTime;
+    }
+
+
+    return total;
+  }
+
 
   Map<String, dynamic> getMapFromUserData() {
 
