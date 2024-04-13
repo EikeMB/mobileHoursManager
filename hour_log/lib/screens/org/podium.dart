@@ -25,7 +25,7 @@ class Podium extends StatelessWidget {
                 children: topThree.isEmpty ? const [Text("No Users")] :
 
                   List<Widget>.generate(order.length, (index) {
-                    UserData user = topThree[order[index]];
+                    UserData user = topThree[order[index] < topThree.length ? order[index] : topThree.length - 1 ];
 
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
@@ -37,7 +37,7 @@ class Podium extends StatelessWidget {
                           height: heights[index],
                           child: 
                               Center(
-                                child: Text('${order[index]+1}',
+                                child: Text('${order[index] < topThree.length ? order[index]+1 : topThree.length}',
                                 style:  const TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold
