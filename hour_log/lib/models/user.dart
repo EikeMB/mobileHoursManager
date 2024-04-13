@@ -1,4 +1,5 @@
 import 'package:hour_log/models/day.dart';
+import 'package:table_calendar/table_calendar.dart';
 
 class AppUser{
   final String uid;
@@ -14,6 +15,15 @@ class UserData{
   final List<WorkDay> workDays;
 
   UserData(this.uid, this.username, this.orgs, this.workDays);
+
+  WorkDay? getWorkdayFromDay(String org, DateTime start){
+    try {
+      return workDays.firstWhere(
+      (day) => isSameDay(day.startTime, start) && org == day.org);
+    } catch (e) {
+      return null;
+    }
+  }
 
 
   Map<String, dynamic> getMapFromUserData() {
