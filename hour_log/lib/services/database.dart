@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hour_log/models/day.dart';
 import 'package:hour_log/models/organization.dart';
 import 'package:hour_log/models/user.dart';
-import 'package:hour_log/shared/constants.dart';
 
 class DatabaseService{
   final String uid;
@@ -95,7 +94,6 @@ class DatabaseService{
   }
 
   Future updateOrganizationData(String name, String code, List<UserData> members, UserData owner) async {
-    Organization org = Organization(name, code, members, owner);
 
     List<Map> membersMaps = [];
 

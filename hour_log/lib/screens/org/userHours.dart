@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:hour_log/models/day.dart';
 import 'package:hour_log/models/organization.dart';
 import 'package:hour_log/models/user.dart';
@@ -32,7 +31,7 @@ class _UserHoursState extends State<UserHours> {
   void initState() {
     super.initState();
     _firstDay = DateTime.now();
-    _lastDay = DateTime.now().add(Duration(days: 30));
+    _lastDay = DateTime.now().add(const Duration(days: 30));
   }
 
 
@@ -43,7 +42,7 @@ class _UserHoursState extends State<UserHours> {
       lastDate: DateTime(DateTime.now().year + 5),
       initialDateRange: DateTimeRange(
         start: _startDate ?? DateTime.now(),
-        end: _endDate ?? DateTime.now().add(Duration(days: 7)),
+        end: _endDate ?? DateTime.now().add(const Duration(days: 7)),
       ),
     );
     if (picked != null && picked.start != picked.end) {
@@ -58,7 +57,7 @@ class _UserHoursState extends State<UserHours> {
 
   @override
   Widget build(BuildContext context) {
-    final AuthService _auth = AuthService();
+    final AuthService auth = AuthService();
     UserData user = widget.user;
     Organization org = widget.org;
 
@@ -74,7 +73,7 @@ class _UserHoursState extends State<UserHours> {
             ),
             icon: const Icon(Icons.person),
             onPressed: () async {
-              await _auth.signOut();
+              await auth.signOut();
               Navigator.of(context).pop();
               Navigator.of(context).pop();
             },

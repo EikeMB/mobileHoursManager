@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hour_log/models/organization.dart';
 import 'package:hour_log/models/user.dart';

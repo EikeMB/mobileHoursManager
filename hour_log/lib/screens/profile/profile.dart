@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hour_log/models/organization.dart';
 import 'package:hour_log/models/user.dart';
-import 'package:hour_log/screens/createOrg/create.dart';
 import 'package:hour_log/screens/profile/changeUserName.dart';
 import 'package:hour_log/services/auth.dart';
 import 'package:hour_log/shared/constants.dart';

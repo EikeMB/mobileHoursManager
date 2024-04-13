@@ -1,13 +1,10 @@
 import 'package:duration_picker/duration_picker.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:hour_log/models/day.dart';
 import 'package:hour_log/models/organization.dart';
 import 'package:hour_log/models/user.dart';
 import 'package:hour_log/screens/org/avatar.dart';
 import 'package:hour_log/screens/org/podium.dart';
-import 'package:hour_log/screens/org/userHours.dart';
 import 'package:hour_log/services/auth.dart';
 import 'package:hour_log/shared/constants.dart';
 import 'package:provider/provider.dart';
