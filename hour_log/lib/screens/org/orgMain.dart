@@ -5,6 +5,8 @@ import 'package:flutter/widgets.dart';
 import 'package:hour_log/models/day.dart';
 import 'package:hour_log/models/organization.dart';
 import 'package:hour_log/models/user.dart';
+import 'package:hour_log/screens/org/avatar.dart';
+import 'package:hour_log/screens/org/podium.dart';
 import 'package:hour_log/screens/org/userHours.dart';
 import 'package:hour_log/services/auth.dart';
 import 'package:hour_log/shared/constants.dart';
@@ -170,39 +172,7 @@ class _OrgState extends State<Org> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: topThree.isEmpty ? const [Text("No Users")] : [
-                  Column(
-                    children: [
-                      CircleAvatar(
-                        radius: 35,
-                        backgroundColor: getUsernameColor(topThree[1].username),
-                        child: Text(topThree[1].username.substring(0, 2).toUpperCase(), style: const TextStyle(fontSize: 20.0, letterSpacing: 2.5)),
-                      ),
-                      Container(color: Colors.red[400], height: 40.0, width: 100.0,),
-                      
-                    ],
-                  ),
-                  Column(
-                    children: [
-                      CircleAvatar(
-                        radius: 35,
-                        backgroundColor: getUsernameColor(topThree[0].username),
-                        child: Text(topThree[0].username.substring(0, 2).toUpperCase(), style: const TextStyle(fontSize: 20.0, letterSpacing: 2.5)),
-                      ),
-                      Container(color: Colors.red[400], height: 70.0, width: 100.0,),
-                      
-                    ],
-                  ),
-                  Column(
-                    children: [
-                      CircleAvatar(
-                        radius: 35,
-                        backgroundColor: getUsernameColor(topThree[2].username),
-                        child: Text(topThree[2].username.substring(0, 2).toUpperCase(), style: const TextStyle(fontSize: 20.0, letterSpacing: 2.5)),
-                      ),
-                      Container(color: Colors.red[400], height: 20.0, width: 100.0,),
-                      
-                    ],
-                  ),
+                  Podium(topThree, widget.org)
                 ],
               ),
               const SizedBox(height: 70.0,),
@@ -212,33 +182,14 @@ class _OrgState extends State<Org> {
                 scrollDirection: Axis.horizontal,
                 child: Row(
                   children: 
-                    widget.org.members.isNotEmpty ? widget.org.members.map((member) => 
-                    InkWell(
-                      onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => UserHours(widget.org, member)));
-                      },
-                      child: CircleAvatar(
-                        radius: 35,
-                        backgroundColor: getUsernameColor(member.username),
-                        child: Text(member.username.substring(0, 2).toUpperCase(), style: const TextStyle(fontSize: 20.0, letterSpacing: 2.5)),
-                      ),
-                    )).expand((widget) => [widget, const SizedBox(width: 15,)]).toList() : [const Text('No Members')]
+                    widget.org.members.isNotEmpty ? widget.org.members.map((member) => Avatar(member, widget.org)).toList() : [const Text('No Members')]
                     
                 ),
               ),
               const SizedBox(height: 10.0,),
               const Text('Owner:', style: TextStyle(fontSize: 20.0),),
               const SizedBox(height: 10.0,),
-              InkWell(
-                onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => UserHours(widget.org, widget.org.owner)));
-                },
-                child: CircleAvatar(
-                      radius: 35,
-                      backgroundColor: Colors.lightBlue[100],
-                      child: Text(widget.org.owner.username.substring(0, 2).toUpperCase(), style: const TextStyle(fontSize: 20.0, letterSpacing: 2.5)),
-                    ),
-              )
+              Avatar(widget.org.owner, widget.org)
             ],
           ),
         ),
