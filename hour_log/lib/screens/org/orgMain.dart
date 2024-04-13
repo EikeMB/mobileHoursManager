@@ -107,6 +107,8 @@ class _OrgState extends State<Org> {
   Widget build(BuildContext context) {
     final user = Provider.of<UserData?>(context);
 
+    
+
     List<UserData> topThree = _getTopThree(widget.org);
     final Duration totalTime = widget.org.getTotalHours();
     final Duration myTotalTime = user !=null ? widget.org.getUserTotalHours(user.uid) : const Duration();

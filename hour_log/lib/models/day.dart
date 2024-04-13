@@ -17,8 +17,8 @@ class WorkDay{
 
     return {
       'organization': org,
-      'startTime': startTime.toUtc().toString(),
-      'endTime': endTime.toUtc().toString(),
+      'startTime': startTime.toString(),
+      'endTime': endTime.toString(),
       'breakTime': breakTime.toString(),
     };
   }

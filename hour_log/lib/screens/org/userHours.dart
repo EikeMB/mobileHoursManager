@@ -75,7 +75,8 @@ class _UserHoursState extends State<UserHours> {
             icon: const Icon(Icons.person),
             onPressed: () async {
               await _auth.signOut();
-              Navigator.pop(context);
+              Navigator.of(context).pop();
+              Navigator.of(context).pop();
             },
             label: const Text(
               'logout',
